@@ -1529,6 +1529,13 @@
 
         function goToWorld(worldId) {
             if (worldId === 3) {
+                let targetDate = new Date("2026-09-05T00:00:00+09:00");
+                let now = new Date();
+                if (now < targetDate) {
+                    showSystemMessage("3세계는 9월 5일에 정식 오픈됩니다! (현재 접근 불가)", "#e74c3c");
+                    return;
+                }
+                
                 const divineItems = ["수박"]; 
                 let divineCount = 0;
                 divineItems.forEach(item => {
