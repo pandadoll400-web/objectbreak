@@ -137,6 +137,7 @@
             text-shadow: 1px 1px 2px black;
         }
         .item-display {
+            touch-action: manipulation;
             width: 160px;
             height: 160px;
             margin: 0 auto 25px;
@@ -182,6 +183,7 @@
             text-shadow: 1px 1px 2px black;
         }
         .btn {
+            touch-action: manipulation;
             background-color: #3498db;
             color: white;
             border: none;
@@ -386,7 +388,7 @@
             <div class="timer-text" id="timerText">20.0s</div>
         </div>
         
-        <div class="item-display" id="itemDisplay" onpointerdown="hitItem(event)">
+        <div class="item-display" id="itemDisplay" onmousedown="hitItem(event)" ontouchstart="hitItem(event)">
             🧽
         </div>
         
@@ -1013,16 +1015,28 @@
 
         function hitItem(e) {
             if (!currentItem || currentHp <= 0 || isSpawning) return;
-            if (e.preventDefault && e.type !== 'pointerdown') e.preventDefault(); 
+            
+            // 모바일 터치 시 발생하는 mousedown 중복 이벤트 무시
+            if (e.type === 'mousedown' && window.lastTouchTime && Date.now() - window.lastTouchTime < 500) {
+                return;
+            }
+            if (e.type === 'touchstart') {
+                window.lastTouchTime = Date.now();
+            }
             
             currentHp -= clickDamage;
 
-            let x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-            let y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-            
-            if (x === 0 && y === 0 && e.type === 'pointerdown') {
-                x = e.pageX || window.innerWidth / 2;
-                y = e.pageY || window.innerHeight / 2;
+            let x = 0;
+            let y = 0;
+            if (e.touches && e.touches.length > 0) {
+                x = e.touches[0].clientX;
+                y = e.touches[0].clientY;
+            } else if (e.clientX !== undefined) {
+                x = e.clientX;
+                y = e.clientY;
+            } else {
+                x = window.innerWidth / 2;
+                y = window.innerHeight / 2;
             }
             
             x += (Math.random() * 30 - 15);
