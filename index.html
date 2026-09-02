@@ -2013,6 +2013,32 @@
             return tiers[0];
         }
 
+
+        function showGraceDialogue(text, duration = 3000) {
+            let dlg = document.getElementById('graceDialogue');
+            let txt = document.getElementById('graceText');
+            if (dlg && txt) {
+                txt.innerText = text;
+                dlg.style.display = 'flex';
+                setTimeout(() => {
+                    dlg.style.display = 'none';
+                }, duration);
+            }
+        }
 </script>
+
+    <div id="graceDialogue" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999999; background: rgba(0,0,0,0.85); border: 3px solid #3498db; border-radius: 15px; padding: 15px; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.9); min-width: 320px; max-width: 90vw; animation: slideUp 0.3s ease-out;">
+        <img src="grace.png" alt="Grace" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #2ecc71; box-shadow: 0 0 15px #2ecc71; object-fit: cover;">
+        <div>
+            <div style="color: #2ecc71; font-weight: bold; font-size: 16px; margin-bottom: 5px; text-shadow: 1px 1px 2px #000;">그레이스</div>
+            <div id="graceText" style="color: #fff; font-size: 20px; font-weight: bold; text-shadow: 1px 1px 2px #000;">hello</div>
+        </div>
+    </div>
+    <style>
+        @keyframes slideUp {
+            from { bottom: -100px; opacity: 0; }
+            to { bottom: 20px; opacity: 1; }
+        }
+    </style>
 </body>
 </html>
