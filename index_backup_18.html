@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>물건 부수기 게임</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1e28;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 450px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #b2bec3;
+            background-color: #2b313f;
+            padding: 15px;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        .header-item {
+            text-align: center;
+        }
+        .header-item span {
+            display: block;
+            margin-top: 5px;
+            color: #f1c40f;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .main-box {
+            background-color: #2b313f;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .item-name {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .item-tier {
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .timer-container {
+            width: 100%;
+            background-color: #1a1e28;
+            border-radius: 10px;
+            height: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #444;
+            position: relative;
+        }
+        .timer-bar {
+            height: 100%;
+            background-color: #3498db;
+            width: 100%;
+            transition: width 0.1s linear, background-color 0.3s;
+        }
+        .timer-text {
+            position: absolute;
+            top: -2px; left: 0; right: 0; bottom: 0;
+            line-height: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        .item-display {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 25px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.05s, box-shadow 0.2s, opacity 0.3s;
+            box-shadow: inset 0 0 15px rgba(255,255,255,0.1), 0 0 15px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .item-display:active {
+            transform: scale(0.92);
+        }
+        .hp-bar-container {
+            width: 100%;
+            background-color: #1a1e28;
+            border-radius: 20px;
+            height: 25px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #444;
+        }
+        .hp-bar {
+            height: 100%;
+            background-color: #e74c3c;
+            width: 100%;
+            transition: width 0.1s;
+        }
+        .hp-text {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            line-height: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .btn:hover { background-color: #2980b9; transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+        .btn-shop { background-color: #e67e22; }
+        .btn-shop:hover { background-color: #d35400; }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            align-items: center; justify-content: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: #2b313f;
+            border-radius: 15px;
+            width: 90%; max-width: 450px;
+            max-height: 85%;
+            padding: 25px;
+            overflow-y: auto;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .close-btn {
+            position: absolute; right: 20px; top: 20px;
+            font-size: 28px; cursor: pointer; color: #bbb;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: white; }
+        .modal h2 { margin-top: 0; color: #f1c40f; border-bottom: 2px solid #444; padding-bottom: 15px; margin-bottom: 20px;}
+        
+        .list-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background-color: rgba(255,255,255,0.05);
+            padding: 15px; border-radius: 10px; margin-bottom: 10px;
+            border-left: 5px solid transparent;
+        }
+        .list-item button {
+            padding: 10px 15px; font-weight: bold; font-size: 14px;
+            background-color: #2ecc71; border: none; border-radius: 5px; color: white; cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .list-item button:hover { background-color: #27ae60; }
+        .list-item button:disabled {
+            background-color: #555; color: #888; cursor: not-allowed;
+        }
+        
+        .floating-dmg {
+            position: fixed;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            pointer-events: none;
+            animation: floatUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            text-shadow: 0 0 5px red, 1px 1px 2px black;
+            z-index: 50;
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+        }
+        
+        .system-msg {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-item">초당 수입<span id="fpsDisplay">0원</span></div>
+        <div class="header-item">클릭 데미지<span id="dmgDisplay">1</span></div>
+        <div class="header-item">소지 금액<span id="moneyDisplay">0원</span></div>
+    </div>
+
+    <div class="main-box">
+        <div class="item-name" id="itemName">지우개</div>
+        <div class="item-tier" id="itemTier">[희귀]</div>
+        
+        <div class="timer-container">
+            <div class="timer-bar" id="timerBar"></div>
+            <div class="timer-text" id="timerText">20.0s</div>
+        </div>
+        
+        <div class="item-display" id="itemDisplay" onclick="hitItem(event)" ontouchstart="hitItem(event)">
+            🧽
+        </div>
+        
+        <div class="hp-bar-container">
+            <div class="hp-bar" id="hpBar"></div>
+            <div class="hp-text" id="hpText">10 / 10</div>
+        </div>
+
+        <button class="btn" onclick="openInventory()">🎒 인벤토리</button>
+        <button class="btn btn-shop" onclick="openShop()">🛒 무기 상점</button>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div class="modal" id="inventoryModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('inventoryModal')">&times;</span>
+            <h2>인벤토리 (부순 물건)</h2>
+            <div id="inventoryList"></div>
+        </div>
+    </div>
+
+    <!-- Shop Modal -->
+    <div class="modal" id="shopModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('shopModal')">&times;</span>
+            <h2>무기 상점</h2>
+            <div id="shopList"></div>
+        </div>
+    </div>
+
+    <script>
+        // 체력을 상위 티어일수록 훨씬 더 높게 조정 (hpBase 수정)
+        const tiers = [
+            { name: "희귀", prob: 500, hpBase: 20, incomeBase: 1, color: "#a29bfe", items: ["지우개", "연필", "신용카드", "안경"] },
+            { name: "초희귀", prob: 300, hpBase: 150, incomeBase: 5, color: "#74b9ff", items: ["공책", "백과사전", "책상", "덤벨"] },
+            { name: "전설", prob: 140, hpBase: 2000, incomeBase: 25, color: "#55efc4", items: ["베개", "변기", "문", "선풍기"] },
+            { name: "신화", prob: 45, hpBase: 30000, incomeBase: 150, color: "#fdcb6e", items: ["범고래", "창", "시계"] },
+            { name: "비밀", prob: 13, hpBase: 1000000, incomeBase: 1000, color: "#ff7675", items: ["컴퓨터", "핸드폰", "건물"] },
+            { name: "유니크", prob: 2, hpBase: 50000000, incomeBase: 10000, color: "#d63031", items: ["왕관"] }
+        ];
+
+        const weapons = [
+            { id: 1, name: "맨손", cost: 0, damage: 1 },
+            { id: 2, name: "나무 막대기", cost: 100, damage: 5 },
+            { id: 3, name: "쇠파이프", cost: 1000, damage: 25 },
+            { id: 4, name: "야구 빠따", cost: 5000, damage: 100 },
+            { id: 5, name: "전기톱", cost: 30000, damage: 500 },
+            { id: 6, name: "레이저 검", cost: 200000, damage: 3000 },
+            { id: 7, name: "플라즈마 캐논", cost: 1500000, damage: 20000 }
+        ];
+
+        const itemIcons = {
+            "지우개": "🧽", "연필": "✏️", "신용카드": "💳", "안경": "👓",
+            "공책": "📓", "백과사전": "📚", "책상": "🪑", "덤벨": "🏋️",
+            "베개": "🛌", "변기": "🚽", "문": "🚪", "선풍기": "🌀",
+            "범고래": "🐋", "창": "🔱", "시계": "⌚",
+            "컴퓨터": "💻", "핸드폰": "📱", "건물": "🏢",
+            "왕관": "👑"
+        };
+
+        let money = 0;
+        let clickDamage = 1;
+        let inventory = {};
+        let ownedWeapons = [1];
+
+        let currentItem = null;
+        let currentHp = 0;
+        let maxHp = 0;
+        
+        const TIME_LIMIT = 20; // 20초 제한
+        let timeLeft = TIME_LIMIT;
+        let isSpawning = false; // 재생성 중일 때 클릭 방지
+
+        function updateUI() {
+            document.getElementById('moneyDisplay').innerText = Math.floor(money).toLocaleString() + "원";
+            document.getElementById('dmgDisplay').innerText = clickDamage.toLocaleString();
+            
+            let fps = 0;
+            for (let name in inventory) {
+                let count = inventory[name];
+                let tier = findTierByItem(name);
+                fps += count * tier.incomeBase;
+            }
+            document.getElementById('fpsDisplay').innerText = fps.toLocaleString() + "원";
+        }
+
+        function findTierByItem(itemName) {
+            for (let t of tiers) {
+                if (t.items.includes(itemName)) return t;
+            }
+            return tiers[0];
+        }
+
+        function spawnItem() {
+            isSpawning = false;
+            let rand = Math.random() * 1000;
+            let sum = 0;
+            let selectedTier = tiers[0];
+            for (let t of tiers) {
+                sum += t.prob;
+                if (rand < sum) {
+                    selectedTier = t;
+                    break;
+                }
+            }
+
+            let itemName = selectedTier.items[Math.floor(Math.random() * selectedTier.items.length)];
+            currentItem = { name: itemName, tier: selectedTier };
+            maxHp = selectedTier.hpBase;
+            currentHp = maxHp;
+            timeLeft = TIME_LIMIT; // 시간 초기화
+
+            document.getElementById('itemName').innerText = itemName;
+            document.getElementById('itemTier').innerText = `[${selectedTier.name}]`;
+            document.getElementById('itemTier').style.color = selectedTier.color;
+            
+            const display = document.getElementById('itemDisplay');
+            display.innerText = itemIcons[itemName] || "📦";
+            display.style.boxShadow = `inset 0 0 25px ${selectedTier.color}40, 0 0 15px ${selectedTier.color}60`;
+            display.style.border = `2px solid ${selectedTier.color}`;
+            display.style.transform = "none";
+            display.style.opacity = "1";
+
+            updateHpBar();
+            updateTimerBar();
+        }
+
+        function updateHpBar() {
+            let pct = (currentHp / maxHp) * 100;
+            if(pct < 0) pct = 0;
+            document.getElementById('hpBar').style.width = pct + "%";
+            document.getElementById('hpText').innerText = `${Math.ceil(currentHp).toLocaleString()} / ${maxHp.toLocaleString()}`;
+        }
+        
+        function updateTimerBar() {
+            let pct = (timeLeft / TIME_LIMIT) * 100;
+            if(pct < 0) pct = 0;
+            const timerBar = document.getElementById('timerBar');
+            timerBar.style.width = pct + "%";
+            document.getElementById('timerText').innerText = timeLeft.toFixed(1) + "s";
+            
+            if (pct < 25) {
+                timerBar.style.backgroundColor = "#e74c3c"; // 빨간색 위험
+            } else if (pct < 50) {
+                timerBar.style.backgroundColor = "#f1c40f"; // 노란색 경고
+            } else {
+                timerBar.style.backgroundColor = "#3498db"; // 파란색 정상
+            }
+        }
+
+        function showDamageText(x, y, dmg) {
+            const el = document.createElement('div');
+            el.className = 'floating-dmg';
+            el.innerText = '-' + dmg;
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 800);
+        }
+
+        function hitItem(e) {
+            if (!currentItem || currentHp <= 0 || isSpawning) return;
+            if (e.type === 'touchstart') e.preventDefault(); 
+            
+            currentHp -= clickDamage;
+
+            let x, y;
+            if (e.type === 'touchstart') {
+                x = e.touches[0].clientX;
+                y = e.touches[0].clientY;
+            } else {
+                x = e.clientX;
+                y = e.clientY;
+            }
+            
+            x += (Math.random() * 30 - 15);
+            y += (Math.random() * 30 - 15);
+            showDamageText(x, y, clickDamage);
+
+            if (currentHp <= 0) {
+                breakItem();
+            } else {
+                updateHpBar();
+            }
+        }
+
+        function breakItem() {
+            isSpawning = true;
+            if (!inventory[currentItem.name]) {
+                inventory[currentItem.name] = 0;
+            }
+            inventory[currentItem.name]++;
+            
+            const display = document.getElementById('itemDisplay');
+            display.style.transform = "scale(0.3) rotate(180deg)";
+            display.style.opacity = "0";
+            document.getElementById('hpBar').style.width = "0%";
+            document.getElementById('hpText').innerText = `0 / ${maxHp.toLocaleString()}`;
+            
+            setTimeout(() => {
+                updateUI();
+                spawnItem();
+            }, 400);
+        }
+        
+        function escapeItem() {
+            isSpawning = true;
+            const display = document.getElementById('itemDisplay');
+            // 도망가는 모션 (오른쪽으로 사라짐)
+            display.style.transform = "translateX(100px) rotate(45deg)";
+            display.style.opacity = "0";
+            
+            showSystemMessage("시간 초과! 물건이 사라졌습니다.", "#e74c3c");
+            
+            setTimeout(() => {
+                spawnItem();
+            }, 600);
+        }
+
+        function openInventory() {
+            document.getElementById('inventoryModal').style.display = 'flex';
+            let html = '';
+            let hasItems = false;
+            
+            let sortedItems = Object.keys(inventory).sort((a, b) => {
+                let tierA = tiers.indexOf(findTierByItem(a));
+                let tierB = tiers.indexOf(findTierByItem(b));
+                return tierB - tierA; 
+            });
+
+            for (let name of sortedItems) {
+                if (inventory[name] > 0) {
+                    hasItems = true;
+                    let tier = findTierByItem(name);
+                    let income = tier.incomeBase * inventory[name];
+                    html += `
+                    <div class="list-item" style="border-left-color: ${tier.color}">
+                        <div>
+                            <span style="font-size:28px; vertical-align: middle; margin-right: 10px;">${itemIcons[name] || "📦"}</span>
+                            <div style="display: inline-block; vertical-align: middle;">
+                                <strong style="font-size:18px;">${name}</strong> <span style="color:${tier.color}; font-size:12px;">[${tier.name}]</span>
+                                <div style="font-size:14px; color:#aaa; margin-top:5px;">보유: ${inventory[name]}개 (초당 +${income}원)</div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            }
+            if(!hasItems) html = "<p style='text-align:center;color:#888;padding:20px;'>아직 부순 물건이 없습니다.<br>물건을 클릭하여 부숴보세요!</p>";
+            document.getElementById('inventoryList').innerHTML = html;
+        }
+
+        function openShop() {
+            document.getElementById('shopModal').style.display = 'flex';
+            renderShop();
+        }
+
+        function renderShop() {
+            let html = '';
+            for (let w of weapons) {
+                if (w.id === 1) continue; 
+                let isOwned = ownedWeapons.includes(w.id);
+                let canBuy = money >= w.cost;
+                
+                let btnHtml = '';
+                if (isOwned) {
+                    btnHtml = `<button disabled style="background-color:#555; color:#aaa;">보유중</button>`;
+                } else if (canBuy) {
+                    btnHtml = `<button onclick="buyWeapon(${w.id}, ${w.cost}, ${w.damage})">${w.cost.toLocaleString()}원</button>`;
+                } else {
+                    btnHtml = `<button disabled>${w.cost.toLocaleString()}원</button>`;
+                }
+
+                html += `
+                <div class="list-item">
+                    <div>
+                        <strong style="font-size:18px;">${w.name}</strong><br>
+                        <span style="font-size:14px; color:#f1c40f;">데미지: +${w.damage.toLocaleString()}</span>
+                    </div>
+                    ${btnHtml}
+                </div>`;
+            }
+            document.getElementById('shopList').innerHTML = html;
+        }
+
+        function buyWeapon(id, cost, damage) {
+            if (money >= cost && !ownedWeapons.includes(id)) {
+                money -= cost;
+                ownedWeapons.push(id);
+                clickDamage = damage; 
+                updateUI();
+                renderShop();
+                showSystemMessage(`${weapons.find(w=>w.id===id).name} 구매 완료!`, "#2ecc71");
+            }
+        }
+        
+        function showSystemMessage(msg, bgColor) {
+            const el = document.createElement('div');
+            el.className = 'system-msg';
+            el.style.backgroundColor = bgColor || 'rgba(46, 204, 113, 0.9)';
+            el.innerText = msg;
+            document.body.appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 500);
+            }, 1500);
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        // Timer Loop (0.1s마다 실행)
+        setInterval(() => {
+            if (!isSpawning && currentHp > 0) {
+                timeLeft -= 0.1;
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    escapeItem(); // 20초 초과 시 도망감
+                } else {
+                    updateTimerBar();
+                }
+            }
+        }, 100);
+
+        // Passive Income Loop (1s마다 실행)
+        setInterval(() => {
+            let fps = 0;
+            for (let name in inventory) {
+                let count = inventory[name];
+                let tier = findTierByItem(name);
+                fps += count * tier.incomeBase;
+            }
+            money += fps;
+            updateUI();
+        }, 1000);
+
+        // Init
+        spawnItem();
+        updateUI();
+
+    </script>
+</body>
+</html>
