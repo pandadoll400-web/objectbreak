@@ -1702,7 +1702,7 @@
         // 9월 4일 금요일 4시 자동 업데이트 타이머
         setInterval(() => {
             const updateTime = new Date("2026-09-04T16:00:00+09:00").getTime();
-            if (!window.updateApplied) {
+            if (Date.now() >= updateTime && !window.updateApplied) {
                 window.updateApplied = true;
                 
                 // 유니크 아이템 추가
