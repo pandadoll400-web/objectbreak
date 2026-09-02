@@ -559,7 +559,9 @@
             { name: "코스믹", prob: 0.5, hpBase: 500000000, breakReward: 200000000, buyCost: 1000000000, incomeBase: 100000, color: "#9b59b6", items: ["블랙홀", "우주선"] },
             { name: "디바인", prob: 0, hpBase: 5000000000, breakReward: 2000000000, buyCost: 10000000000, incomeBase: 1000000, color: "#ff9f43", items: ["수박"] },
             { name: "금지된", prob: 0, hpBase: 50000000000, breakReward: 20000000000, buyCost: 100000000000, incomeBase: 10000000, color: "#34495e", items: ["왁뿌볼", "마계의 눈", "흑염룡"] },
-            { name: "천상의", prob: 0, hpBase: 500000000000, breakReward: 200000000000, buyCost: 1000000000000, incomeBase: 100000000, color: "#f5f6fa", items: ["천사의 날개", "신의 지팡이", "성배"] }
+            { name: "천상의", prob: 0, hpBase: 500000000000, breakReward: 200000000000, buyCost: 1000000000000, incomeBase: 100000000, color: "#f5f6fa", items: ["천사의 날개", "신의 지팡이", "성배"] },
+            { name: "울트라", prob: 0, hpBase: 5000000000000, breakReward: 2000000000000, buyCost: 10000000000000, incomeBase: 1000000000, color: "#1abc9c", items: ["광선검", "에너지 코어"] },
+            { name: "인피니티", prob: 0, hpBase: 50000000000000, breakReward: 20000000000000, buyCost: 100000000000000, incomeBase: 10000000000, color: "#ff00ff", items: ["무한의 건틀릿", "창조주의 펜"] }
         ];
 
                 const weapons = [
@@ -1322,6 +1324,7 @@
                         <span style="font-size: 16px; font-weight: bold;">${p === '고양이' ? '🐈' : '🔥'} ${p} ${isEq ? '<span style="color:#f1c40f">(장착중)</span>' : ''}</span>
                         <div style="font-size:12px; color:#aaa; margin-bottom: 5px;">${p === '고양이' ? '자동으로 조금씩 공격합니다.' : '물건이 나타나면 10초 동안 시간이 멈춥니다.'}</div>
                         <button onclick="togglePet('${p}')" style="background-color: ${isEq ? '#e74c3c' : '#2ecc71'}; padding: 5px 10px;">${isEq ? '해제' : '장착'}</button>
+        <button class="btn" style="background-color: #e84393; margin-top: 10px;" onclick="goToWorld(5)">🌌 갤럭시 2 (1월드: 카오스 모드)</button>
                     </div>`;
                 }
             });
@@ -1600,7 +1603,12 @@
             let btnSynth = document.getElementById('btnSynth');
             let btnUpdate = document.getElementById('btnUpdate');
             
-            if (worldId === 3) {
+            if (worldId === 5) {
+                document.body.style.background = "linear-gradient(45deg, #000000, #ff00ff, #00ffff)";
+                document.body.style.color = "#ffffff";
+                if(btnSynth) btnSynth.style.display = "block";
+                if(btnUpdate) btnUpdate.style.display = "block";
+            } else if (worldId === 3) {
                 document.body.style.background = "linear-gradient(90deg, #fdfbfb 0%, #dcdde1 49.9%, #8e44ad 50%, #2c3e50 100%)";
                 document.body.style.color = "#ffffff";
                 if(btnSynth) btnSynth.style.display = "none";
@@ -1665,9 +1673,12 @@
             }
 
             currentWorld = worldId;
-            if (currentWorld === 4) {
-                    selectedTier = Math.random() < 0.5 ? tiers.find(t => t.name === "비밀") : tiers.find(t => t.name === "코스믹");
-                } else if (currentWorld === 3) {
+            if (currentWorld === 5) {
+                selectedTier = tiers.find(t => t.name === "디바인");
+                showSystemMessage(`제 갤럭시 2 (1월드: 카오스 모드)에 입장하셨습니다!`, "#ff00ff");
+            } else if (currentWorld === 4) {
+                selectedTier = Math.random() < 0.5 ? tiers.find(t => t.name === "비밀") : tiers.find(t => t.name === "코스믹");
+            } else if (currentWorld === 3) {
                 showSystemMessage(`제 천사악마 지역에 입장하셨습니다!`, "#9b59b6");
             } else {
                 showSystemMessage(`제 ${worldId}세계로 이동했습니다!`, "#9b59b6");
@@ -1862,19 +1873,34 @@
                 let rand = Math.random();
                 let selectedTier;
                 
-                if (currentWorld === 3) {
-                    // 디바인 95%, 코스믹 4%, 천상의 0.9%, 금지된 0.1%
-                    if (rand < 0.95) selectedTier = tiers.find(t => t.name === "디바인");
-                    else if (rand < 0.99) selectedTier = tiers.find(t => t.name === "코스믹");
-                    else if (rand < 0.999) selectedTier = tiers.find(t => t.name === "천상의");
+                if (currentWorld === 5) {
+                    if (rand < 0.375) selectedTier = tiers.find(t => t.name === "디바인");
+                    else if (rand < 0.75) selectedTier = tiers.find(t => t.name === "코스믹");
+                    else if (rand < 0.85) selectedTier = tiers.find(t => t.name === "금지된");
+                    else if (rand < 0.95) selectedTier = tiers.find(t => t.name === "천상의");
+                    else if (rand < 0.99) selectedTier = tiers.find(t => t.name === "울트라");
+                    else selectedTier = tiers.find(t => t.name === "인피니티");
+                } else if (currentWorld === 3) {
+                    if (rand < 0.375) selectedTier = tiers.find(t => t.name === "비밀");
+                    else if (rand < 0.75) selectedTier = tiers.find(t => t.name === "유니크");
+                    else if (rand < 0.85) selectedTier = tiers.find(t => t.name === "디바인");
+                    else if (rand < 0.95) selectedTier = tiers.find(t => t.name === "코스믹");
+                    else if (rand < 0.99) selectedTier = tiers.find(t => t.name === "천상의");
                     else selectedTier = tiers.find(t => t.name === "금지된");
                 } else if (currentWorld === 2) {
-                    // 전설/신화 94%, 비밀 5.7%, 디바인 0.3%
-                    if (rand < 0.94) {
-                        selectedTier = Math.random() < 0.7 ? tiers.find(t => t.name === "전설") : tiers.find(t => t.name === "신화");
-                    }
-                    else if (rand < 0.997) selectedTier = tiers.find(t => t.name === "비밀");
-                    else selectedTier = tiers.find(t => t.name === "디바인");
+                    if (rand < 0.375) selectedTier = tiers.find(t => t.name === "전설");
+                    else if (rand < 0.75) selectedTier = tiers.find(t => t.name === "신화");
+                    else if (rand < 0.85) selectedTier = tiers.find(t => t.name === "비밀");
+                    else if (rand < 0.95) selectedTier = tiers.find(t => t.name === "유니크");
+                    else if (rand < 0.99) selectedTier = tiers.find(t => t.name === "디바인");
+                    else selectedTier = tiers.find(t => t.name === "코스믹");
+                } else if (currentWorld === 1) {
+                    if (rand < 0.375) selectedTier = tiers.find(t => t.name === "희귀");
+                    else if (rand < 0.75) selectedTier = tiers.find(t => t.name === "초희귀");
+                    else if (rand < 0.85) selectedTier = tiers.find(t => t.name === "전설");
+                    else if (rand < 0.95) selectedTier = tiers.find(t => t.name === "신화");
+                    else if (rand < 0.99) selectedTier = tiers.find(t => t.name === "비밀");
+                    else selectedTier = tiers.find(t => t.name === "유니크");
                 } else {
                     let cumulative = 0;
                     let totalProb = tiers.reduce((sum, t) => sum + t.prob, 0);
