@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>물건 부수기 게임</title>
+    <title>물건 부수기 게임 (Object Break) - 중독성 최고의 방치형 클리커 게임</title>
+    <meta name="description" content="다양한 등급의 물건을 부수고 돈을 벌어 강력한 무기를 구입하세요! 1세계부터 3세계까지 끝없는 노가다와 파밍이 기다리는 궁극의 방치형 웹 게임입니다.">
+    <meta name="keywords" content="물건 부수기, Object Break, 방치형 게임, 클리커 게임, 노가다 게임, 웹 게임, idle game, clicker game, 무료 게임, 웹게임 추천">
+    <meta name="author" content="pandadoll400">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="물건 부수기 게임 - Object Break">
+    <meta property="og:description" content="물건을 부수고 돈을 벌어 강력한 무기를 구입하세요! 끝없는 방치형 클리커의 세계로 초대합니다.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="물건 부수기 게임">
+    <meta name="twitter:description" content="물건을 부수고 돈을 벌어 강력한 무기를 구입하세요!">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -376,7 +386,7 @@
             <div class="timer-text" id="timerText">20.0s</div>
         </div>
         
-        <div class="item-display" id="itemDisplay" onclick="hitItem(event)" ontouchstart="hitItem(event)">
+        <div class="item-display" id="itemDisplay" onpointerdown="hitItem(event)">
             🧽
         </div>
         
@@ -1003,17 +1013,16 @@
 
         function hitItem(e) {
             if (!currentItem || currentHp <= 0 || isSpawning) return;
-            if (e.type === 'touchstart') e.preventDefault(); 
+            if (e.preventDefault && e.type !== 'pointerdown') e.preventDefault(); 
             
             currentHp -= clickDamage;
 
-            let x, y;
-            if (e.type === 'touchstart') {
-                x = e.touches[0].clientX;
-                y = e.touches[0].clientY;
-            } else {
-                x = e.clientX;
-                y = e.clientY;
+            let x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+            let y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+            
+            if (x === 0 && y === 0 && e.type === 'pointerdown') {
+                x = e.pageX || window.innerWidth / 2;
+                y = e.pageY || window.innerHeight / 2;
             }
             
             x += (Math.random() * 30 - 15);
