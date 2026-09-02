@@ -1166,13 +1166,13 @@
                 
                 if (typeof money !== 'undefined') money += reward;
                 
-                // 특성이 켜져있을 때만 0.1% 확률로 펫 획득
+                // 특성이 켜져있을 때만 1% 확률로 펫 획득
                 if (!isSilent) {
                     let activePets = [];
                     if (typeof isCatActive !== 'undefined' && isCatActive) activePets.push("고양이");
                     if (typeof isPhoenixActive !== 'undefined' && isPhoenixActive) activePets.push("피닉스");
                     
-                    if (activePets.length > 0 && Math.random() < 0.001) {
+                    if (activePets.length > 0 && Math.random() < 0.01) {
                         let p = activePets[Math.floor(Math.random() * activePets.length)];
                         inventory["pet_" + p] = (inventory["pet_" + p] || 0) + 1;
                         showSystemMessage(`🎉 특성 보너스! 전설의 펫 [${p}]를 획득했습니다!`, "#f39c12");
@@ -1325,7 +1325,7 @@
                     </div>`;
                 }
             });
-            if (!hasPet) petHtml += "<p style='color:#888; font-size:14px;'>보유한 펫이 없습니다. (해당 특성이 켜져있을 때만 0.1% 확률로 드롭)</p>";
+            if (!hasPet) petHtml += "<p style='color:#888; font-size:14px;'>보유한 펫이 없습니다. (해당 특성이 켜져있을 때만 1% 확률로 드롭)</p>";
             petHtml += '</div>';
 
             let html = `
@@ -1755,6 +1755,52 @@
                 updateUI();
             }
         }, 1000);
+
+        
+        // 정규 이벤트 스케줄러 (9월 5일부터 적용)
+        window.prevRecurringEvent = "";
+        setInterval(() => {
+            let now = new Date();
+            if (now.getTime() >= new Date("2026-09-05T00:00:00+09:00").getTime()) {
+                let day = now.getDay();
+                let isWeekend = (day === 0 || day === 6);
+                let hour = now.getHours();
+                let min = now.getMinutes();
+                
+                let isEventActive = false;
+                if (!isWeekend) {
+                    // 평일: 짝수 시간마다 (0, 2, 4... 총 12번) 1시간씩
+                    if (hour % 2 === 0) isEventActive = true;
+                } else {
+                    // 주말: 1시간마다 30분씩 (총 24번)
+                    if (min < 30) isEventActive = true;
+                }
+                
+                let currentEvent = "";
+                if (isEventActive) {
+                    let seed = now.getDate() + hour;
+                    currentEvent = (seed % 2 === 0) ? "고양이" : "피닉스";
+                }
+                
+                if (currentEvent !== window.prevRecurringEvent) {
+                    if (currentEvent !== "") {
+                        window.isCatActive = (currentEvent === "고양이");
+                        window.isPhoenixActive = (currentEvent === "피닉스");
+                        if (typeof showSystemMessage === 'function') {
+                            showSystemMessage(`🔥 정규 보너스 타임! [${currentEvent}] 특성이 활성화되었습니다!`, "#9b59b6");
+                        }
+                    } else {
+                        window.isCatActive = false;
+                        window.isPhoenixActive = false;
+                        if (typeof showSystemMessage === 'function') {
+                            showSystemMessage(`정규 보너스 타임이 종료되었습니다.`, "#95a5a6");
+                        }
+                    }
+                    window.prevRecurringEvent = currentEvent;
+                }
+            }
+        }, 1000);
+
 
         // 9월 4일 금요일 4시 자동 업데이트 타이머
         setInterval(() => {
