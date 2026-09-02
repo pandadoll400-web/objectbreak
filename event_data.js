@@ -1,10 +1,19 @@
 (function() {
     // 자동 패치 코드 (1회 새로고침 후 무한 반복 방지)
-    if (!sessionStorage.getItem('auto_update_hotfix_world3_release')) {
-        sessionStorage.setItem('auto_update_hotfix_world3_release', 'true');
+    if (!sessionStorage.getItem('auto_update_hotfix_dialogue')) {
+        sessionStorage.setItem('auto_update_hotfix_dialogue', 'true');
         location.reload();
         return;
     }
+    
+    // 라이브 이벤트 강제 트리거!
+    if (!sessionStorage.getItem('grace_hello_live_1')) {
+        sessionStorage.setItem('grace_hello_live_1', 'true');
+        if (typeof showGraceDialogue === 'function') {
+            showGraceDialogue("hello", 3000);
+        }
+    }
+
     if (!sessionStorage.getItem('auto_update_grace_event')) {
         sessionStorage.setItem('auto_update_grace_event', 'true');
         location.reload();
