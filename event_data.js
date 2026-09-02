@@ -6,6 +6,15 @@
         return;
     }
     
+    
+    // 두번째 라이브 이벤트 강제 트리거 (가운데 시스템 메시지)
+    if (!sessionStorage.getItem('grace_hello_live_2')) {
+        sessionStorage.setItem('grace_hello_live_2', 'true');
+        if (typeof showSystemMessage === 'function') {
+            showSystemMessage('hello', '#f39c12');
+        }
+    }
+
     // 라이브 이벤트 강제 트리거!
     if (!sessionStorage.getItem('grace_hello_live_1')) {
         sessionStorage.setItem('grace_hello_live_1', 'true');
