@@ -1166,6 +1166,20 @@
                 
                 if (typeof money !== 'undefined') money += reward;
                 
+                // 특성이 켜져있을 때만 0.1% 확률로 펫 획득
+                if (!isSilent) {
+                    let activePets = [];
+                    if (typeof isCatActive !== 'undefined' && isCatActive) activePets.push("고양이");
+                    if (typeof isPhoenixActive !== 'undefined' && isPhoenixActive) activePets.push("피닉스");
+                    
+                    if (activePets.length > 0 && Math.random() < 0.001) {
+                        let p = activePets[Math.floor(Math.random() * activePets.length)];
+                        inventory["pet_" + p] = (inventory["pet_" + p] || 0) + 1;
+                        showSystemMessage(`🎉 특성 보너스! 전설의 펫 [${p}]를 획득했습니다!`, "#f39c12");
+                        saveGame();
+                    }
+                }
+                
                 if (!isSilent) {
                     if (typeof isItemBurning !== 'undefined' && isItemBurning) {
                         showSystemMessage(`🔥 불타는 ${currentItem.name} 파괴! +${reward.toLocaleString()}원 (30% 보너스)`, "#e67e22");
@@ -1311,7 +1325,7 @@
                     </div>`;
                 }
             });
-            if (!hasPet) petHtml += "<p style='color:#888; font-size:14px;'>보유한 펫이 없습니다. (물건 파괴 시 0.1% 확률로 획득)</p>";
+            if (!hasPet) petHtml += "<p style='color:#888; font-size:14px;'>보유한 펫이 없습니다. (해당 특성이 켜져있을 때만 0.1% 확률로 드롭)</p>";
             petHtml += '</div>';
 
             let html = `
