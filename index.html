@@ -1307,7 +1307,8 @@
                     let tier = findTierByItem(name);
                     let equipped = equippedInventory[name] || 0;
                     let unequipped = inventory[name] - equipped;
-                    let income = tier.incomeBase;\n                if (name.includes("책상과 의자")) income = 1200;
+                    let income = tier.incomeBase;
+                if (name.includes("책상과 의자")) income = 1200;
                     if (name.includes("[천악]")) income = Math.floor(income * 1.1);
                     
                     html += `
