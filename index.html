@@ -1155,7 +1155,27 @@
                 
                 setTimeout(() => {
                     if (typeof updateUI === 'function') updateUI();
-                    spawnItem();
+                    
+                    if (currentWorld === 4 && !isSilent) {
+                        const display = document.getElementById('itemDisplay');
+                        if (display) {
+                            display.innerText = "⏳";
+                            display.style.opacity = "1";
+                            display.style.transform = "none";
+                            display.style.border = "none";
+                            display.style.boxShadow = "none";
+                        }
+                        let nameEl = document.getElementById('itemName');
+                        if (nameEl) nameEl.innerText = "다음 스폰 대기 중... (20초)";
+                        let tierEl = document.getElementById('itemTier');
+                        if (tierEl) tierEl.innerText = "";
+                        
+                        setTimeout(() => {
+                            spawnItem();
+                        }, 20000);
+                    } else {
+                        spawnItem();
+                    }
                 }, 400);
             } catch(e) {
                 if(typeof showSystemMessage === 'function') showSystemMessage("파괴 오류: " + e.message, "#e74c3c");
