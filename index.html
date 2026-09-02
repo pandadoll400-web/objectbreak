@@ -1166,13 +1166,13 @@
                 
                 if (typeof money !== 'undefined') money += reward;
                 
-                // 특성이 켜져있을 때만 1% 확률로 펫 획득
+                // 특성이 켜져있을 때만 0.1% 확률로 펫 획득
                 if (!isSilent) {
                     let activePets = [];
                     if (typeof isCatActive !== 'undefined' && isCatActive) activePets.push("고양이");
                     if (typeof isPhoenixActive !== 'undefined' && isPhoenixActive) activePets.push("피닉스");
                     
-                    if (activePets.length > 0 && Math.random() < 0.01) {
+                    if (activePets.length > 0 && Math.random() < 0.001) {
                         let p = activePets[Math.floor(Math.random() * activePets.length)];
                         inventory["pet_" + p] = (inventory["pet_" + p] || 0) + 1;
                         showSystemMessage(`🎉 특성 보너스! 전설의 펫 [${p}]를 획득했습니다!`, "#f39c12");
@@ -1325,7 +1325,7 @@
                     </div>`;
                 }
             });
-            if (!hasPet) petHtml += "<p style='color:#888; font-size:14px;'>보유한 펫이 없습니다. (해당 특성이 켜져있을 때만 1% 확률로 드롭)</p>";
+            if (!hasPet) petHtml += "<p style='color:#888; font-size:14px;'>보유한 펫이 없습니다. (해당 특성이 켜져있을 때만 0.1% 확률로 드롭)</p>";
             petHtml += '</div>';
 
             let html = `
@@ -1769,11 +1769,11 @@
                 
                 let isEventActive = false;
                 if (!isWeekend) {
-                    // 평일: 짝수 시간마다 (0, 2, 4... 총 12번) 1시간씩
-                    if (hour % 2 === 0) isEventActive = true;
+                    // 평일: 짝수 시간마다 정각부터 5분 동안 (총 12번)
+                    if (hour % 2 === 0 && min < 5) isEventActive = true;
                 } else {
-                    // 주말: 1시간마다 30분씩 (총 24번)
-                    if (min < 30) isEventActive = true;
+                    // 주말: 매시간 정각부터 5분 동안 (총 24번)
+                    if (min < 5) isEventActive = true;
                 }
                 
                 let currentEvent = "";
