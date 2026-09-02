@@ -552,7 +552,7 @@
             { name: "초희귀", prob: 300, hpBase: 150, breakReward: 50, buyCost: 250, incomeBase: 5, color: "#74b9ff", items: ["공책", "백과사전", "책상", "덤벨"] },
             { name: "전설", prob: 140, hpBase: 2000, breakReward: 500, buyCost: 2500, incomeBase: 25, color: "#55efc4", items: ["베개", "변기", "문", "선풍기"] },
             { name: "신화", prob: 45, hpBase: 30000, breakReward: 10000, buyCost: 50000, incomeBase: 150, color: "#fdcb6e", items: ["범고래", "창", "시계"] },
-            { name: "비밀", prob: 13, hpBase: 1000000, breakReward: 500000, buyCost: 2500000, incomeBase: 1000, color: "#ff7675", items: ["컴퓨터", "핸드폰", "건물", "생일 케이크"] },
+            { name: "비밀", prob: 13, hpBase: 1000000, breakReward: 500000, buyCost: 2500000, incomeBase: 1000, color: "#ff7675", items: ["컴퓨터", "핸드폰", "건물", "생일 케이크", "책상과 의자"] },
             { name: "유니크", prob: 2, hpBase: 50000000, breakReward: 20000000, buyCost: 100000000, incomeBase: 10000, color: "#d63031", items: ["왕관", "대장장이의 망치"] },
             { name: "코스믹", prob: 0.5, hpBase: 500000000, breakReward: 200000000, buyCost: 1000000000, incomeBase: 100000, color: "#9b59b6", items: ["블랙홀", "우주선"] },
             { name: "디바인", prob: 0, hpBase: 5000000000, breakReward: 2000000000, buyCost: 10000000000, incomeBase: 1000000, color: "#ff9f43", items: ["수박"] },
@@ -579,7 +579,7 @@
             "공책": "📓", "백과사전": "📚", "책상": "🪑", "덤벨": "🏋️",
             "베개": "🛌", "변기": "🚽", "문": "🚪", "선풍기": "🌀",
             "범고래": "🐳", "창": "🪟", "시계": "⌚",
-            "컴퓨터": "💻", "핸드폰": "📱", "건물": "🏢", "생일 케이크": "🎂",
+            "컴퓨터": "💻", "핸드폰": "📱", "건물": "🏢", "생일 케이크": "🎂", "책상과 의자": "🪑🪑",
             "왕관": "👑", "대장장이의 망치": "🔨",
             "블랙홀": "🌌", "우주선": "🛸",
             "수박": "🍉",
@@ -1293,7 +1293,7 @@
                     let tier = findTierByItem(name);
                     let equipped = equippedInventory[name] || 0;
                     let unequipped = inventory[name] - equipped;
-                    let income = tier.incomeBase;
+                    let income = tier.incomeBase;\n                if (name.includes("책상과 의자")) income = 1200;
                     if (name.includes("[천악]")) income = Math.floor(income * 1.1);
                     
                     html += `
