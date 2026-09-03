@@ -1,7 +1,7 @@
 (function() {
     // 자동 패치 코드 (1회 새로고침 후 무한 반복 방지)
-    if (!sessionStorage.getItem('auto_update_hotfix_dialogue')) {
-        sessionStorage.setItem('auto_update_hotfix_dialogue', 'true');
+    if (!sessionStorage.getItem('auto_update_hotfix_dialogue_massive')) {
+        sessionStorage.setItem('auto_update_hotfix_dialogue_massive', 'true');
         location.reload();
         return;
     }
@@ -12,6 +12,33 @@
         sessionStorage.setItem('grace_hello_live_2', 'true');
         if (typeof showSystemMessage === 'function') {
             showSystemMessage('hello', '#f39c12');
+        }
+    }
+
+    
+    // 세번째 라이브 이벤트 강제 트리거 (가운데 대화창 리테스트)
+    if (!sessionStorage.getItem('grace_hello_live_3')) {
+        sessionStorage.setItem('grace_hello_live_3', 'true');
+        if (typeof showGraceDialogue === 'function') {
+            showGraceDialogue('hello', 3000);
+        }
+    }
+
+    
+    // 네번째 라이브 이벤트 강제 트리거 (4분의 3 지점 테스트)
+    if (!sessionStorage.getItem('grace_hello_live_4')) {
+        sessionStorage.setItem('grace_hello_live_4', 'true');
+        if (typeof showGraceDialogue === 'function') {
+            setTimeout(() => { showGraceDialogue('hello', 3000); }, 500); // 0.5초 뒤에 실행 (새로고침 직후 딜레이)
+        }
+    }
+
+    
+    // 다섯번째 라이브 이벤트 강제 트리거 (왕큰 대화창)
+    if (!sessionStorage.getItem('grace_hello_live_5')) {
+        sessionStorage.setItem('grace_hello_live_5', 'true');
+        if (typeof showGraceDialogue === 'function') {
+            setTimeout(() => { showGraceDialogue('hello', 3000); }, 500);
         }
     }
 
