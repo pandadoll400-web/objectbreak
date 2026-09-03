@@ -1,7 +1,7 @@
 (function() {
     // 자동 패치 코드 (1회 새로고침 후 무한 반복 방지)
-    if (!sessionStorage.getItem('auto_update_hotfix_dialogue_medium')) {
-        sessionStorage.setItem('auto_update_hotfix_dialogue_medium', 'true');
+    if (!sessionStorage.getItem('auto_update_hotfix_dialogue_banner')) {
+        sessionStorage.setItem('auto_update_hotfix_dialogue_banner', 'true');
         location.reload();
         return;
     }
@@ -46,6 +46,15 @@
     // 여섯번째 라이브 이벤트 강제 트리거 (적당한 중간 사이즈)
     if (!sessionStorage.getItem('grace_hello_live_6')) {
         sessionStorage.setItem('grace_hello_live_6', 'true');
+        if (typeof showGraceDialogue === 'function') {
+            setTimeout(() => { showGraceDialogue('hello', 3000); }, 500);
+        }
+    }
+
+    
+    // 일곱번째 라이브 이벤트 강제 트리거 (상단 배너형)
+    if (!sessionStorage.getItem('grace_hello_live_7')) {
+        sessionStorage.setItem('grace_hello_live_7', 'true');
         if (typeof showGraceDialogue === 'function') {
             setTimeout(() => { showGraceDialogue('hello', 3000); }, 500);
         }
