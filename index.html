@@ -1819,7 +1819,7 @@
 
         // 9월 4일 금요일 4시 자동 업데이트 타이머 (16:12:00 시작으로 조정됨)
         setInterval(() => {
-            const updateTime = new Date("2026-09-04T16:16:00+09:00").getTime();
+            const updateTime = new Date("2026-09-04T16:20:00+09:00").getTime();
             let now = Date.now();
             if (now >= updateTime) {
                 if (!window.updateApplied) {
@@ -1836,10 +1836,13 @@
                         if (document.getElementById('shopModal').style.display === 'flex') renderShop();
                         if (document.getElementById('synthModal').style.display === 'flex') renderSynth();
                     }
-                    showSystemMessage("🎉 대규모 업데이트가 활성화되었습니다!", "#f1c40f");
                     
-                    // 정각 대사 (It's my first...)
-                    if(typeof showGraceDialogue==="function") showGraceDialogue("It's my first update...", 4000);
+                    if (!localStorage.getItem('update_popup_shown_1620')) {
+                        localStorage.setItem('update_popup_shown_1620', 'true');
+                        showSystemMessage("🎉 대규모 업데이트가 활성화되었습니다!", "#f1c40f");
+                        // 정각 대사 (It's my first...)
+                        if(typeof showGraceDialogue==="function") showGraceDialogue("It's my first update...", 4000);
+                    }
                 }
 
                 let elapsed = now - updateTime;
