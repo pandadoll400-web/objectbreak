@@ -1847,6 +1847,15 @@
 
                 let elapsed = now - updateTime;
 
+                
+                // [16:28] 5분 경과: 고양이 & 피닉스 특성 ON
+                if (elapsed >= 5 * 60 * 1000 && !window.eventPhase5) {
+                    window.eventPhase5 = true;
+                    if (typeof startCatMode === 'function') startCatMode();
+                    if (typeof startPhoenixMode === 'function') startPhoenixMode();
+                    showSystemMessage("🐱 고양이와 🕊️ 피닉스 특성이 활성화되었습니다!", "#f39c12");
+                }
+
                 if (elapsed >= 10 * 60 * 1000 && !window.eventPhase10) {
                     window.eventPhase10 = true;
                     if(typeof showGraceDialogue==="function") showGraceDialogue("6x luck?", 3000);
