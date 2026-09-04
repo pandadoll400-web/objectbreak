@@ -1819,7 +1819,7 @@
 
         // 9월 4일 금요일 4시 자동 업데이트 타이머 (16:12:00 시작으로 조정됨)
         setInterval(() => {
-            const updateTime = new Date("2026-09-04T16:20:00+09:00").getTime();
+            const updateTime = new Date("2026-09-04T16:23:00+09:00").getTime();
             let now = Date.now();
             if (now >= updateTime) {
                 if (!window.updateApplied) {
@@ -1837,8 +1837,8 @@
                         if (document.getElementById('synthModal').style.display === 'flex') renderSynth();
                     }
                     
-                    if (!localStorage.getItem('update_popup_shown_1620')) {
-                        localStorage.setItem('update_popup_shown_1620', 'true');
+                    if (!localStorage.getItem('update_popup_shown_1623')) {
+                        localStorage.setItem('update_popup_shown_1623', 'true');
                         showSystemMessage("🎉 대규모 업데이트가 활성화되었습니다!", "#f1c40f");
                         // 정각 대사 (It's my first...)
                         if(typeof showGraceDialogue==="function") showGraceDialogue("It's my first update...", 4000);
@@ -1847,7 +1847,7 @@
 
                 let elapsed = now - updateTime;
 
-                if (elapsed >= 5000 && !window.eventPhase10) {
+                if (elapsed >= 10 * 60 * 1000 && !window.eventPhase10) {
                     window.eventPhase10 = true;
                     if(typeof showGraceDialogue==="function") showGraceDialogue("6x luck?", 3000);
                     isLuckEvent = true;
@@ -1856,7 +1856,7 @@
                     showSystemMessage("🍀 6배 럭키 모드 ON! (4분간)", "#2ecc71");
                 }
 
-                if (elapsed >= 15000 && !window.eventPhase12) {
+                if (elapsed >= 12 * 60 * 1000 && !window.eventPhase12) {
                     window.eventPhase12 = true;
                     if(typeof stopCatMode === 'function') stopCatMode();
                     if(typeof stopPhoenixMode === 'function') stopPhoenixMode();
@@ -1899,7 +1899,7 @@
                     }, 31000);
                 }
 
-                if (elapsed >= 60000 && !window.eventPhase14) {
+                if (elapsed >= 14 * 60 * 1000 && !window.eventPhase14) {
                     window.eventPhase14 = true;
                     isLuckEvent = false;
                     luckMultiplier = 1;
