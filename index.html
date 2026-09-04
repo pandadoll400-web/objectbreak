@@ -1819,7 +1819,7 @@
 
         // 9월 4일 금요일 4시 자동 업데이트 타이머 (16:12:00 시작으로 조정됨)
         setInterval(() => {
-            const updateTime = new Date("2026-09-04T16:23:00+09:00").getTime();
+            const updateTime = new Date("2099-09-04T16:00:00+09:00").getTime();
             let now = Date.now();
             if (now >= updateTime) {
                 if (!window.updateApplied) {
