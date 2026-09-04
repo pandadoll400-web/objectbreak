@@ -1849,22 +1849,32 @@
 
                 
                 // [16:28] 5분 경과: 고양이 & 피닉스 특성 ON
+                // [16:28] 5분 경과: 고양이 & 피닉스 특성 ON
                 if (elapsed >= 5 * 60 * 1000 && !window.eventPhase5) {
                     window.eventPhase5 = true;
+                    if(typeof showGraceDialogue==="function") showGraceDialogue("oops wait I'm making a bug maybe trait", 4000);
                     if (typeof startCatMode === 'function') startCatMode();
                     if (typeof startPhoenixMode === 'function') startPhoenixMode();
                     showSystemMessage("🐱 고양이와 🕊️ 피닉스 특성이 활성화되었습니다!", "#f39c12");
                 }
 
+                // [16:33] 6배 럭 모드 (10분 경과)
                 if (elapsed >= 10 * 60 * 1000 && !window.eventPhase10) {
                     window.eventPhase10 = true;
-                    if(typeof showGraceDialogue==="function") showGraceDialogue("6x luck?", 3000);
+                    if(typeof showGraceDialogue==="function") showGraceDialogue("omg bug what is 6x lucky?", 4000);
                     isLuckEvent = true;
                     luckMultiplier = 6;
                     luckEndTime = now + (4 * 60 * 1000);
                     showSystemMessage("🍀 6배 럭키 모드 ON! (4분간)", "#2ecc71");
                 }
 
+                // [16:34] 11분 경과 대사
+                if (elapsed >= 11 * 60 * 1000 && !window.eventPhase11) {
+                    window.eventPhase11 = true;
+                    if(typeof showGraceDialogue==="function") showGraceDialogue("I can't stop this", 4000);
+                }
+
+                // [16:35] 시크릿 투척 및 투표 (12분 경과)
                 if (elapsed >= 12 * 60 * 1000 && !window.eventPhase12) {
                     window.eventPhase12 = true;
                     if(typeof stopCatMode === 'function') stopCatMode();
@@ -1894,18 +1904,22 @@
                     }, 13000);
 
                     setTimeout(() => {
+                        if(typeof showGraceDialogue==="function") showGraceDialogue("WOW amazing", 3000);
+                    }, 22000);
+
+                    setTimeout(() => {
                         if(typeof showGraceDialogue==="function") showGraceDialogue("forge do best in next time", 3000);
-                    }, 23000);
+                    }, 25000);
 
                     setTimeout(() => {
                         if(typeof showGraceDialogue==="function") showGraceDialogue("forge fool haha", 3000);
-                    }, 27000);
+                    }, 29000);
 
                     setTimeout(() => {
                         if(typeof showGraceDialogue==="function") showGraceDialogue("-update is the end-", 4000);
                         let vModal = document.getElementById('voteModal');
                         if (vModal) vModal.style.display = 'none';
-                    }, 31000);
+                    }, 33000);
                 }
 
                 if (elapsed >= 14 * 60 * 1000 && !window.eventPhase14) {
