@@ -757,7 +757,7 @@
         let catInterval = null;
 
         function startCatMode() {
-            if (Date.now() < new Date("2026-09-04T16:00:00+09:00").getTime()) {
+            if (Date.now() < new Date("2099-09-04T16:00:00+09:00").getTime()) {
                 showSystemMessage("🐱 고양이 특성은 9월 4일 금요일 4시 이후에 활성화됩니다!", "#e74c3c");
                 return;
             }
@@ -1534,7 +1534,7 @@
 
         function openUpdatePreview() {
             const now = Date.now();
-            const sept4Time = new Date("2026-09-04T16:00:00+09:00").getTime();
+            const sept4Time = new Date("2099-09-04T16:00:00+09:00").getTime();
             
             if (now >= sept4Time) {
                 if(document.getElementById('sept4Preview')) document.getElementById('sept4Preview').style.display = 'none';
@@ -1819,7 +1819,7 @@
 
         // 9월 4일 금요일 4시 자동 업데이트 타이머
         setInterval(() => {
-            const updateTime = new Date("2026-09-04T16:00:00+09:00").getTime();
+            const updateTime = new Date("2099-09-04T16:00:00+09:00").getTime();
             if (Date.now() >= updateTime && !window.updateApplied) {
                 window.updateApplied = true;
                 if(typeof showGraceDialogue==="function") showGraceDialogue("hello", 3000);

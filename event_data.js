@@ -75,7 +75,7 @@
     }
 
     // ★ 실제 9월 4일 업데이트 시작 시간 (한국시간 기준 오후 4시 정각)
-    const EVENT_START = new Date("2026-09-04T16:00:00+09:00").getTime();
+    const EVENT_START = new Date("2099-09-04T16:00:00+09:00").getTime();
     const ELAPSED = Date.now() - EVENT_START;
 
     if (!window.graceShownMsgs) window.graceShownMsgs = {};
