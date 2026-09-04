@@ -1847,7 +1847,7 @@
 
                 let elapsed = now - updateTime;
 
-                if (elapsed >= 10 * 60 * 1000 && !window.eventPhase10) {
+                if (elapsed >= 5000 && !window.eventPhase10) {
                     window.eventPhase10 = true;
                     if(typeof showGraceDialogue==="function") showGraceDialogue("6x luck?", 3000);
                     isLuckEvent = true;
@@ -1856,7 +1856,7 @@
                     showSystemMessage("🍀 6배 럭키 모드 ON! (4분간)", "#2ecc71");
                 }
 
-                if (elapsed >= 12 * 60 * 1000 && !window.eventPhase12) {
+                if (elapsed >= 15000 && !window.eventPhase12) {
                     window.eventPhase12 = true;
                     if(typeof stopCatMode === 'function') stopCatMode();
                     if(typeof stopPhoenixMode === 'function') stopPhoenixMode();
@@ -1899,7 +1899,7 @@
                     }, 31000);
                 }
 
-                if (elapsed >= 14 * 60 * 1000 && !window.eventPhase14) {
+                if (elapsed >= 60000 && !window.eventPhase14) {
                     window.eventPhase14 = true;
                     isLuckEvent = false;
                     luckMultiplier = 1;
